@@ -1,0 +1,108 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-bottom: var(--space-6);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.logoIcon {
+  font-size: var(--text-2xl);
+}
+
+.logoText {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tagline {
+  font-size: var(--text-xs);
+  color: var(--color-text-subtle);
+  letter-spacing: 0.04em;
+}
+
+.welcome {
+  margin-bottom: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.welcomeName {
+  font-size: var(--text-3xl);
+  font-weight: 800;
+  background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.actionGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.actionGrid > :last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.actionCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+  text-align: left;
+  min-height: 110px;
+}
+
+.actionCard:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.actionCard:active {
+  transform: translateY(0);
+}
+
+.actionIcon {
+  font-size: var(--text-2xl);
+  line-height: 1;
+}
+
+.actionLabel {
+  font-family: var(--font-heading);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.actionDesc {
+  font-size: var(--text-xs);
+  color: var(--color-text-subtle);
+  line-height: 1.4;
+}

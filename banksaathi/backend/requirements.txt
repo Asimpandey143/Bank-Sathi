@@ -1,0 +1,35 @@
+# Web framework
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+
+# Database
+sqlalchemy[asyncio]==2.0.36
+asyncpg==0.29.0
+alembic==1.13.3
+
+# Validation
+pydantic==2.9.2
+pydantic-settings==2.5.2
+email-validator==2.2.0
+
+# Auth
+python-jose[cryptography]==3.3.0
+bcrypt>=4.0.1
+
+# Redis
+redis==5.1.1
+
+# HTTP client (for external provider calls)
+httpx==0.28.1
+
+# Utilities
+python-multipart==0.0.12
+python-dotenv==1.0.1
+orjson==3.10.10
+
+# Testing
+pytest==8.3.3
+pytest-asyncio==0.24.0
+pytest-cov==5.0.0
+anyio==4.8.0
+aiosqlite==0.20.0
