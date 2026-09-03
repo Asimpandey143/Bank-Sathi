@@ -213,6 +213,73 @@ class MockIntentProvider:
         )
 
 
+class GroqLLMProvider:
+    """
+    Adapter for Groq Ultra-Fast Inference API (OpenAI-compatible)
+    with guaranteed deterministic fallback to MockIntentProvider.
+    """
+
+    def __init__(
+        self,
+        api_key: str,
+        model: str = "openai/gpt-oss-120b",
+        fallback: MockIntentProvider | None = None,
+    ) -> None:
+        self.api_key = api_key
+        self.model = model
+        self.fallback = fallback or MockIntentProvider()
+
+    async def parse_intent(self, text: str) -> IntentResponse:
+        if not self.api_key:
+            return await self.fallback.parse_intent(text)
+
+        try:
+            import json
+            import httpx
+
+            url = "https://api.groq.com/openai/v1/chat/completions"
+            headers = {
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+                "User-Agent": "BankSathi-API/1.0",
+            }
+            system_prompt = (
+                "You are BankSathi's banking intent extractor. Extract structured banking intent from user text.\n"
+                "Return ONLY a valid JSON object matching this schema:\n"
+                "{\n"
+                '  "intent": "TRANSFER" | "CHECK_BALANCE" | "PAY_BILL" | "LIST_TRANSACTIONS" | "HELP" | "CANCEL" | "UNKNOWN",\n'
+                '  "amount": number or null,\n'
+                '  "currency": "INR",\n'
+                '  "beneficiary_name": string or null,\n'
+                '  "confidence": float between 0 and 1,\n'
+                '  "clarification_needed": boolean,\n'
+                '  "clarification_question": string or null\n'
+                "}"
+            )
+            payload = {
+                "model": self.model,
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": text},
+                ],
+                "response_format": {"type": "json_object"},
+                "temperature": 0.1,
+            }
+
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                resp = await client.post(url, json=payload, headers=headers)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    content = data["choices"][0]["message"]["content"]
+                    parsed = json.loads(content)
+                    return IntentResponse.model_validate(parsed)
+        except Exception:
+            # Fall back to deterministic intent parser on any network or parsing error
+            pass
+
+        return await self.fallback.parse_intent(text)
+
+
 class GeminiLLMProvider:
     """
     Adapter for Google Gemini LLM API with guaranteed fallback to MockIntentProvider.
@@ -260,6 +327,10 @@ class GeminiLLMProvider:
 # Provider factory
 def get_llm_provider(settings: Settings | None = None) -> LLMProvider:
     s = settings or get_settings()
+    if s.llm_provider == "groq" and s.groq_api_key:
+        return GroqLLMProvider(api_key=s.groq_api_key, model=s.groq_model)
     if s.llm_provider == "gemini" and s.llm_api_key:
         return GeminiLLMProvider(api_key=s.llm_api_key)
+    if s.groq_api_key:
+        return GroqLLMProvider(api_key=s.groq_api_key, model=s.groq_model)
     return MockIntentProvider()

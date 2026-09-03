@@ -37,13 +37,15 @@ class Settings(BaseSettings):
     jwt_expiry_minutes: int = 60
 
     # Providers
-    llm_provider: Literal["mock", "gemini", "openai"] = "mock"
+    llm_provider: Literal["mock", "gemini", "openai", "groq"] = "groq"
     voice_provider: Literal["mock", "google", "azure"] = "mock"
     bank_provider: Literal["mock"] = "mock"
 
     # API keys (optional — only needed for non-mock providers)
     llm_api_key: str = ""
     voice_api_key: str = ""
+    groq_api_key: str = ""
+    groq_model: str = "openai/gpt-oss-120b"
 
     # Risk engine thresholds
     risk_threshold_medium: int = 25
