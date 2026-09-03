@@ -1,4 +1,4 @@
-# 🏦 BankSathi — Accessible, Family-Protected Digital Banking
+# 🏦 BankSathi - Accessible, Family-Protected Digital Banking
 
 > **"Shared guidance, not shared access."**  
 > Accessible, voice-first digital banking tailored for Indian seniors, featuring **Trusted Circle** advisory second opinions with zero screen-sharing and zero helper PIN/account access.
