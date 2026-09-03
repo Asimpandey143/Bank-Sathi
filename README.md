@@ -21,7 +21,7 @@ Millions of seniors and digitally inexperienced individuals in India struggle wi
 ## 🚀 Key Features
 
 ### 1. 🛡️ Trusted Circle & Advisory Second Opinion
-* **Zero Screen-Sharing**: No remote screen access, no OTP/PIN exposure, and no account takeover risk.
+* **Zero Screen-Sharing**: No remote screen access, No OTP/PIN exposure, and no account takeover risk.
 * **Advisory Feedback**: Trusted family members provide real-time guidance:
   * `✓ Looks Expected`
   * `⚠️ Don't Recognize This`
