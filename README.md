@@ -7,7 +7,7 @@
 
 ## 🌟 Overview
 
-Millions of seniors and digitally inexperienced individuals in India struggle with modern UPI and net-banking interfaces. Conventional solutions often resort to screen-sharing tools (like AnyDesk or TeamViewer), which lead to devastating fraud, OTP theft, and loss of financial autonomy.
+Millions of Seniors and digitally inexperienced individuals in India struggle with modern UPI and net-banking interfaces. Conventional solutions often resort to screen-sharing tools (like AnyDesk or TeamViewer), which lead to devastating fraud, OTP theft, and loss of financial autonomy.
 
 **BankSathi** redesigns digital banking around dignity, clarity, and safety:
 1. **Conversational Voice Banking**: Speak naturally in your native language (*"Send five thousand rupees to Ravi"*).
