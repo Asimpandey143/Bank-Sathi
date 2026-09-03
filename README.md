@@ -138,7 +138,7 @@ Frontend application will be live at: **http://localhost:5173**
 
 ## 🧪 Automated Tests
 
-Run backend pytest suite:
+Run backend pytest suite:-
 ```bash
 cd banksaathi/backend
 pytest tests/ -q
