@@ -15,6 +15,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Header } from '../components/Header'
 import { CaptionsBanner } from '../components/CaptionsBanner'
+import { VoiceAssistantModal } from '../components/VoiceAssistantModal'
 import { useAccessibility } from '../context/AccessibilityContext'
 import { api, Transaction, ensureDemoUser } from '../services/api'
 import { voice } from '../services/voice'
@@ -30,6 +31,7 @@ export const DashboardPage: React.FC = () => {
   const [isListening, setIsListening] = useState<boolean>(false)
   const [speechTranscript, setSpeechTranscript] = useState<string>('')
   const [showBalance, setShowBalance] = useState<boolean>(true)
+  const [isVoiceModalOpen, setIsVoiceModalOpen] = useState<boolean>(false)
 
   useEffect(() => {
     loadDashboardData()
@@ -62,35 +64,7 @@ export const DashboardPage: React.FC = () => {
   }
 
   const handleVoiceQuickAction = () => {
-    if (isListening) {
-      setIsListening(false)
-      voice.stopListening()
-      return
-    }
-
-    setSpeechTranscript('Listening... Speak your command (e.g. "Send 5,000 to Ravi")')
-    speakWithCaptions('Listening. Please tell me who you want to pay, and how much.')
-
-    const started = voice.startListening(
-      (transcript: string, isFinal: boolean) => {
-        setSpeechTranscript(transcript)
-        if (isFinal && transcript.trim()) {
-          setIsListening(false)
-          navigate(`/transactions/new?q=${encodeURIComponent(transcript)}`)
-        }
-      },
-      () => {
-        setIsListening(false)
-        setSpeechTranscript('Voice not detected. Click below to type.')
-      },
-      () => {
-        setIsListening(false)
-      }
-    )
-
-    if (started) {
-      setIsListening(true)
-    }
+    setIsVoiceModalOpen(true)
   }
 
   return (
@@ -572,18 +546,24 @@ export const DashboardPage: React.FC = () => {
       {/* ── Floating Voice Assistant FAB (Google Blue) ───────────────────────── */}
       <button
         type="button"
-        className={`fab-voice ${isListening ? 'pulse' : ''}`}
+        className="fab-voice"
         onClick={handleVoiceQuickAction}
-        aria-label={isListening ? 'Stop voice assistant' : 'Activate voice assistant'}
+        aria-label="Activate voice assistant"
         title="Voice Assistant"
         style={{
-          background: isListening ? '#dc2626' : 'linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%)',
+          background: 'linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%)',
         }}
       >
         <span style={{ fontSize: '2rem' }} aria-hidden="true">
-          {isListening ? '⏹️' : '🎙️'}
+          🎙️
         </span>
       </button>
+
+      {/* ── Conversational Voice Assistant Modal (EchoDrive Powered) ────────── */}
+      <VoiceAssistantModal
+        isOpen={isVoiceModalOpen}
+        onClose={() => setIsVoiceModalOpen(false)}
+      />
     </div>
   )
 }

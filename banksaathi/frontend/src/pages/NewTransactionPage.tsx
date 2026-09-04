@@ -31,7 +31,14 @@ export const NewTransactionPage: React.FC = () => {
     async function init() {
       await ensureDemoUser()
       const q = searchParams.get('q')
-      if (q) {
+      const beneficiary = searchParams.get('beneficiary')
+      const amount = searchParams.get('amount')
+
+      if (beneficiary || amount) {
+        const queryText = `Send ${amount ? '₹' + amount : ''} to ${beneficiary || ''}`.trim()
+        setInputQuery(queryText)
+        handleParseIntent(queryText)
+      } else if (q) {
         setInputQuery(q)
         handleParseIntent(q)
       }
@@ -46,25 +53,22 @@ export const NewTransactionPage: React.FC = () => {
       return
     }
 
-    speakWithCaptions(
-      'Listening. Say your transfer command, for example: Send five thousand rupees to Ravi.',
-      'Listening... Speak naturally'
-    )
+    // Cancel any active speech first so speakers don't echo into microphone
+    voice.cancelSpeech()
 
-    const started = voice.startListening(
-      (transcript, isFinal) => {
-        setInputQuery(transcript)
-        if (isFinal && transcript.trim()) {
-          setIsListening(false)
-          handleParseIntent(transcript)
-        }
+    const started = voice.startContinuousSession(
+      (interim) => {
+        setInputQuery(interim)
+      },
+      (finalText) => {
+        setInputQuery(finalText)
+        setIsListening(false)
+        voice.stopListening()
+        handleParseIntent(finalText)
       },
       () => {
         setIsListening(false)
         setErrorMsg('Microphone error or speech not recognized.')
-      },
-      () => {
-        setIsListening(false)
       }
     )
 
